@@ -130,7 +130,7 @@ resource "aws_ecs_service" "up_the_bracket" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
-    container_name   = "aws_ecs_app_sample"
+    container_name   = "projeto-x"
     container_port   = 80
   }
 }
@@ -145,8 +145,8 @@ resource "aws_ecs_task_definition" "time_for_heroes" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
 
   container_definitions = jsonencode([{
-    name  = "aws_ecs_app_sample"
-    image = "public.ecr.aws/ecs-sample-image/amazon-ecs-sample:latest"
+    name  = "projeto-x"
+    image = "paulothelibertines/projeto-x:latest"
     
     portMappings = [{
       containerPort = 80
@@ -158,8 +158,8 @@ resource "aws_ecs_task_definition" "time_for_heroes" {
     essential = true
 
     environment = [{
-      name  = "FFKEY"
-      value = "dec627fe-59a7-4680-900e-6cd4db5d9f09"
+      name  = "PORT"
+      value = "80"
     }]
   }])
 }
@@ -239,8 +239,7 @@ resource "aws_launch_template" "ecs_lt" {
       Name = "ecs-instance"
     }
   }
-
-  user_data = filebase64("${path.module}/ecs.sh")
+  user_data = filebase64("${path.module}/setup.sh")
 }
 
 resource "aws_autoscaling_group" "ecs_asg" {
